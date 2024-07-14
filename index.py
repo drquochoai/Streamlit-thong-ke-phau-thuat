@@ -9,7 +9,7 @@ from urllib.error import URLError
 def get_UN_data():
     AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=csv"
     # AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?gid=0&single=true&output=csv"
-    uploaded_file = st.file_uploader("Upload a file", type="xls")
+    uploaded_file = st.file_uploader("Upload a file")
     if uploaded_file is not None:
         # df = pd.read_csv(AWS_BUCKET_URL)
         df = pd.read_excel(uploaded_file, sheet_name=0, engine='openpyxl')
