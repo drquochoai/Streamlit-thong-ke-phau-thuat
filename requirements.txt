@@ -1,2 +1,5 @@
+pygwalker
 openpyxl
 xlrd
+numpy
+pandas
