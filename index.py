@@ -20,7 +20,6 @@ st.markdown(
     """
     <style>
     * {font-size: 12px}
-    #root > div:nth-child(1) > div > div > a, .viewerBadge_container__r5tak, header {display:none !important}
     </style>
     """,
     unsafe_allow_html=True,
