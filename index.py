@@ -10,8 +10,7 @@ urllib.request.urlretrieve("https://docs.google.com/spreadsheets/d/e/2PACX-1vQNp
 def get_UN_data():
     AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=csv"
     AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=xlsx"
-    # AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?gid=0&single=true&output=csv"
-    # AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?gid=0&single=true&output=csv"
+
     with urllib.request.urlopen(AWS_BUCKET_URL) as f:
         html = f.read()
         df = pd.read_excel(html, sheet_name=0, engine='openpyxl')
@@ -26,13 +25,13 @@ def get_UN_data():
 
 try:
     df = get_UN_data()
-    countries = st.multiselect(
+    danhSachBacSi = st.multiselect(
         "Chọn bác sĩ", list(df.index), ["2638 BS.CKI Trần Quốc Hoài", "1342 TS.BS Nguyễn Anh Dũng", "3663 ThS.BS Nguyễn Hồng Vinh", "2670 ThS.BS.CKI Lê Thị Ngọc Hằng", "6489 ThS. BS Trần Thúc Khang", "6176 BS.CKI Lê Chí Hiếu", "4972 ThS.BS Phan Vũ Hồng Hải", "4091 BS.CKI Phạm Ngọc Minh Thủy"]
     )
-    if not countries:
-        st.error("Please select at least one country.")
+    if not danhSachBacSi:
+        st.error("Chọn ít nhất 1 bác sĩ.")
     else:
-        data = df.loc[countries]
+        data = df.loc[danhSachBacSi]
         # data /= 1000000.0
         st.write("### Danh sách bệnh nhân đã phẫu thuật", data.sort_index())
 
@@ -40,6 +39,7 @@ try:
         data = pd.melt(data, id_vars=["index"]).rename(
             columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
         )
+        st.header(df.__len__)
         chart = (
             alt.Chart(data)
             .mark_area(opacity=0.3)
