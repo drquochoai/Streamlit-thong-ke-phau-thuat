@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from openpyxl import load_workbook
 import io
+from tabulate import tabulate
+
 
 # from pygwalker.api.streamlit import StreamlitRenderer
 
@@ -13,6 +15,11 @@ st.set_page_config(
     layout="wide"
 )
 # @st.cache_data
+# Load the custom CSS file
+st.markdown(
+    f'<style>@import url("/static/custom.css");</style>',
+    unsafe_allow_html=True,
+)
 
 
 def get_UN_data():
@@ -41,9 +48,9 @@ def get_UN_data():
 
         df = pd.read_excel(
             file_object_load_GG_SHEET_directed_to_variable, sheet_name=option_Sheet_thong_ke, engine='openpyxl')
-        inf_bao = st.warning("Dữ liệu đã được tải thành công.")
+        # inf_bao = st.warning("Dữ liệu đã được tải thành công.")
         inf_moLinkEdit = st.link_button("Mở trang dữ liệu", url=LINK_EDIT)
-        return df.set_index("MABN")
+        return df.reset_index(drop=True)
 
         with urllib.request.urlopen(LINK_PUBLIC_TO_WEB) as f:
             html = f.read()
@@ -56,14 +63,16 @@ def get_UN_data():
     if uploaded_file is not None:
         df = pd.read_excel(uploaded_file, sheet_name=0, engine='openpyxl')
         inf_bao.empty()
-        return df.set_index("MABN")
+        return df.set_index("ID")
 
 
 try:
     df = get_UN_data()
-    dsbacsikhoaNTMLN = ["2638 BS.CKI Trần Quốc Hoài", "1342 TS.BS Nguyễn Anh Dũng", "3663 ThS.BS Nguyễn Hồng Vinh",
-               "2670 ThS.BS.CKI Lê Thị Ngọc Hằng", "6489 ThS. BS Trần Thúc Khang", "6176 BS.CKI Lê Chí Hiếu", "4972 ThS.BS Phan Vũ Hồng Hải", "4091 BS.CKI Phạm Ngọc Minh Thủy"]
-    dsbacsikhoaNTMLN_filter = [bs for bs in dsbacsikhoaNTMLN if bs in df["HOTEN1"].unique().tolist()]
+    dsbacsikhoaNTMLN = ["1342 TS.BS Nguyễn Anh Dũng", "6489 ThS. BS Trần Thúc Khang",
+                        "2670 ThS.BS.CKI Lê Thị Ngọc Hằng", "3663 ThS.BS Nguyễn Hồng Vinh",
+                        "2638 BS.CKI Trần Quốc Hoài", "4091 BS.CKI Phạm Ngọc Minh Thủy", "4972 ThS.BS Phan Vũ Hồng Hải", "6176 BS.CKI Lê Chí Hiếu"]
+    dsbacsikhoaNTMLN_filter = [
+        bs for bs in dsbacsikhoaNTMLN if bs in df["HOTEN1"].unique().tolist()]
     danhSachBacSi = st.multiselect(
         "Chọn bác sĩ", df["HOTEN1"].unique().tolist(),
         dsbacsikhoaNTMLN_filter
@@ -71,32 +80,44 @@ try:
     if not danhSachBacSi:
         st.error("Chọn ít nhất 1 bác sĩ.")
     else:
-        data = df.loc[df["HOTEN1"].isin(danhSachBacSi)]
+        data_GOC_NTMLN = df.loc[df["HOTEN1"].isin(danhSachBacSi)]
         # data /= 1000000.0
-        st.write("### Danh sách bệnh nhân đã phẫu thuật", data)
-
-        # data = data.T.reset_index()
-        # data = pd.melt(data, id_vars=["index"]).rename(
-        #     columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
-        # )
-        st.header("Tổng số PT/TT: " + str(data.shape[0]))
-
+        
+        
+        dulieu_baoCao = data_GOC_NTMLN[['MABN', 'HOTEN', 'NAMSINH', 'NGAY', 'TENPT', 'HOTEN1']].rename(columns={'MABN': 'PID', 'HOTEN': 'Tên BN', 'HOTEN1': 'PTV', 'NAMSINH': "Năm sinh", 'NGAY': "Ngày PT", 'TENPT': "Tên phẫu thuật"})
+        # st.write(dulieu_baoCao)
+        
+        st.header("Tổng số PT/TT: " + str(dulieu_baoCao.shape[0]))
+        
+        html_table = tabulate(dulieu_baoCao.sort_values("Ngày PT").to_dict("records"),
+                              tablefmt="html", headers="keys")
+        st.markdown(f'{html_table}', unsafe_allow_html=True)
+        
+        
         # PT theo danh mục
         st.header("Tổng số PT/TT theo danh mục:")
-        unique_TENPTDM = data['TENPTDM'].unique()
-        newdf = pd.DataFrame({'Tên PT/TT': unique_TENPTDM, 'Số lượng': data.groupby(
+        unique_TENPTDM = data_GOC_NTMLN['TENPTDM'].unique()
+        newdf = pd.DataFrame({'Tên PT/TT': unique_TENPTDM, 'Số lượng': data_GOC_NTMLN.groupby(
             'TENPTDM').size()}).reset_index(drop=True)
 
-        st.write(newdf)
+        # st.write(newdf)
+        # Generate an HTML table using tabulate
+        html_table = tabulate(newdf.to_dict("records"),
+                              tablefmt="html", headers="keys")
+        st.markdown(f'{html_table}', unsafe_allow_html=True)
 
         # PTTT theo bác sĩ
         st.header("Tổng số PT/TT theo bác sĩ:")
-        unique_HOTEN1 = data['HOTEN1'].unique()
-        newdf = pd.DataFrame({'PTV': unique_HOTEN1, 'Số lượng': data.groupby(
+        unique_HOTEN1 = data_GOC_NTMLN['HOTEN1'].unique()
+        newdf = pd.DataFrame({'PTV': unique_HOTEN1, 'Số lượng': data_GOC_NTMLN.groupby(
             'HOTEN1').size()}).reset_index(drop=True)
 
         sorted_df = newdf.sort_values('Số lượng', ascending=False)
-        st.write(sorted_df)
+        # Generate an HTML table using tabulate
+        html_table = tabulate(sorted_df.to_dict(
+            "records"), tablefmt="html", headers="keys")
+        st.markdown(f'{html_table}', unsafe_allow_html=True)
+        # f'{df.to_markdown()}'
         # chart = (
         #     alt.Chart(data)
         #     .mark_area(opacity=0.3)
@@ -107,6 +128,9 @@ try:
         #     )
         # )
         # st.altair_chart(chart, use_container_width=True)
+        st.header("Bảng full dữ liệu:")
+        st.write("### Danh sách bệnh nhân đã phẫu thuật", data_GOC_NTMLN)
+
 except URLError as e:
     st.error(
         """
