@@ -10,7 +10,7 @@ urllib.request.urlretrieve("https://docs.google.com/spreadsheets/d/e/2PACX-1vQNp
 def get_UN_data():
     AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=csv"
     AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=xlsx"
-
+    AWS_BUCKET_URL = ""
     with urllib.request.urlopen(AWS_BUCKET_URL) as f:
         html = f.read()
         df = pd.read_excel(html, sheet_name=0, engine='openpyxl')
@@ -39,7 +39,7 @@ try:
         data = pd.melt(data, id_vars=["index"]).rename(
             columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
         )
-        st.header(df.__len__)
+        st.header(data.length)
         chart = (
             alt.Chart(data)
             .mark_area(opacity=0.3)
