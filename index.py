@@ -4,7 +4,7 @@ import altair as alt
 # from pygwalker.api.streamlit import StreamlitRenderer
 
 from urllib.error import URLError
-# import urllib.request
+import urllib.request
 # # urllib.request.urlretrieve("https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=xlsx", "files.xlsx")
 st.set_page_config(
     page_title="Thống kê PTTT Ngoại TM-LN",
@@ -13,16 +13,18 @@ st.set_page_config(
 # @st.cache_data
 def get_UN_data():
     # Hàm load file online, khi published
-    
-    # AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=csv"
-    # AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=xlsx"
-    # AWS_BUCKET_URL = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/Thang%206%20PTTT.xlsx"
-    # with urllib.request.urlopen(AWS_BUCKET_URL) as f:
-    #     html = f.read()
-    #     df = pd.read_excel(html, sheet_name=0, engine='openpyxl')
-    #     return df.set_index("MABN")
-
-
+    try:
+        # AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=csv"
+        AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=xlsx"
+        # AWS_BUCKET_URL = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/Thang%206%20PTTT.xlsx"
+        with urllib.request.urlopen(AWS_BUCKET_URL) as f:
+            html = f.read()
+            df = pd.read_excel(html, sheet_name=0, engine='openpyxl')
+            return df.set_index("MABN")
+    except URLError as e:
+        st.error(f"Lỗi load file từ google sheet: {e}")
+        
+        
     # Hàm load file từ local, khi debug
     
     uploaded_file = st.file_uploader("Tải file xlSX")
