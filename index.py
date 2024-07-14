@@ -17,7 +17,12 @@ st.set_page_config(
 # @st.cache_data
 # Load the custom CSS file
 st.markdown(
-    '<style>*{font-size: 12px}; #root > div:nth-child(1) > div > div > a {display:none}</style>',
+    """
+    <style>
+    *{font-size: 12px}
+    #root > div:nth-child(1) > div > div > a {display:none !important}
+    </style>
+    """,
     unsafe_allow_html=True,
 )
 
