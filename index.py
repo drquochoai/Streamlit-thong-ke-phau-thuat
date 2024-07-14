@@ -84,7 +84,7 @@ try:
         # PT theo danh mục
         st.header("Tổng số PT/TT theo danh mục:")
         unique_TENPTDM = data['TENPTDM'].unique()
-        newdf = pd.DataFrame({'TENPTDM_UNI': unique_TENPTDM, 'Count': data.groupby(
+        newdf = pd.DataFrame({'Tên PT/TT': unique_TENPTDM, 'Số lượng': data.groupby(
             'TENPTDM').size()}).reset_index(drop=True)
 
         st.write(newdf)
@@ -92,10 +92,10 @@ try:
         # PTTT theo bác sĩ
         st.header("Tổng số PT/TT theo bác sĩ:")
         unique_HOTEN1 = data['HOTEN1'].unique()
-        newdf = pd.DataFrame({'HOTEN1_UNI': unique_HOTEN1, 'Count': data.groupby(
+        newdf = pd.DataFrame({'PTV': unique_HOTEN1, 'Số lượng': data.groupby(
             'HOTEN1').size()}).reset_index(drop=True)
 
-        sorted_df = newdf.sort_values('Count', ascending=False)
+        sorted_df = newdf.sort_values('Số lượng', ascending=False)
         st.write(sorted_df)
         # chart = (
         #     alt.Chart(data)
