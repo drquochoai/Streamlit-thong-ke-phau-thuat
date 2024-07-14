@@ -13,7 +13,7 @@ def get_UN_data():
     # AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?gid=0&single=true&output=csv"
     # AWS_BUCKET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?gid=0&single=true&output=csv"
     with urllib.request.urlopen(AWS_BUCKET_URL) as f:
-        html = f.read().decode('utf-8')
+        html = f.read()
         df = pd.read_excel(html, sheet_name=0, engine='openpyxl')
 
     # uploaded_file = st.file_uploader("Upload a file")
