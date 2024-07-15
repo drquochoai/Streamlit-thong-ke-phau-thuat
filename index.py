@@ -26,10 +26,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-""" AI requset: df['NGAY'] in csv is a datetype with stringtype, write code to convert df['NGAY'] to:
-if df['NGAY'] type is date, assign new date: with month to day and day to month, keep year
-if df['NGAY'] type is string, usually "12/07/2024 9:00", assign new date that get first 2 charactor as day, charactor 4 and 5 is month, and 7 to 10 is year
- """
+# """ AI requset: df['NGAY'] in csv is a datetype with stringtype, write code to convert df['NGAY'] to:
+# if df['NGAY'] type is date, assign new date: with month to day and day to month, keep year
+# if df['NGAY'] type is string, usually "12/07/2024 9:00", assign new date that get first 2 charactor as day, charactor 4 and 5 is month, and 7 to 10 is year
+#  """
 def convert_date(date_str):
     if isinstance(date_str, datetime.date):
         # If the input is a date object, swap month and day
