@@ -3,6 +3,7 @@ import pandas as pd
 from openpyxl import load_workbook
 import io
 from tabulate import tabulate
+import datetime
 
 
 # from pygwalker.api.streamlit import StreamlitRenderer
@@ -25,6 +26,20 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+""" AI requset: df['NGAY'] in csv is a datetype with stringtype, write code to convert df['NGAY'] to:
+if df['NGAY'] type is date, assign new date: with month to day and day to month, keep year
+if df['NGAY'] type is string, usually "12/07/2024 9:00", assign new date that get first 2 charactor as day, charactor 4 and 5 is month, and 7 to 10 is year
+ """
+def convert_date(date_str):
+    if isinstance(date_str, datetime.date):
+        # If the input is a date object, swap month and day
+        return datetime.date(date_str.year, date_str.day, date_str.month)
+    elif isinstance(date_str, str):
+        # If the input is a string, extract day, month, and year
+        day, month, year = int(date_str[:2]), int(date_str[3:5]), int(date_str[6:10])
+        return datetime.date(year, month, day)
+    else:
+        raise ValueError("Invalid input type. Expected date or string.")
 
 def get_UN_data():
     # Hàm load file online, khi published
@@ -54,6 +69,8 @@ def get_UN_data():
             file_object_load_GG_SHEET_directed_to_variable, sheet_name=option_Sheet_thong_ke, engine='openpyxl')
         # inf_bao = st.warning("Dữ liệu đã được tải thành công.")
         inf_moLinkEdit = st.link_button("Mở trang dữ liệu", url=LINK_EDIT)
+        # df['NGAY'] = df['NGAY'].astype(str)
+        df['NGAY'] = df['NGAY'].apply(convert_date)
         return df.reset_index(drop=True)
 
         with urllib.request.urlopen(LINK_PUBLIC_TO_WEB) as f:
