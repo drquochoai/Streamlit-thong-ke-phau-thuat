@@ -39,7 +39,7 @@ def convert_date(date_str):
         day, month, year = int(date_str[:2]), int(date_str[3:5]), int(date_str[6:10])
         return datetime.date(year, month, day)
     else:
-        raise ValueError("Invalid input type. Expected date or string.")
+        return datetime.date(1999, 9, 9)
 
 def get_UN_data():
     # Hàm load file online, khi published
@@ -70,7 +70,14 @@ def get_UN_data():
         # inf_bao = st.warning("Dữ liệu đã được tải thành công.")
         inf_moLinkEdit = st.link_button("Mở trang dữ liệu", url=LINK_EDIT)
         # df['NGAY'] = df['NGAY'].astype(str)
+        df['SONHA'] = df['SONHA'].astype(str)
+        df['SOCMND'] = df['SOCMND'].astype(str)
+        df['NGAYCAP'] = df['NGAYCAP'].astype(str)
         df['NGAY'] = df['NGAY'].apply(convert_date)
+        df['NGAYKT'] = df['NGAYKT'].apply(convert_date)
+        df['NGAYRV'] = df['NGAYRV'].apply(convert_date)
+        df['NGAYRUT'] = df['NGAYRUT'].apply(convert_date)
+        df['NGAYCATCHI'] = df['NGAYCATCHI'].apply(convert_date)
         return df.reset_index(drop=True)
 
         with urllib.request.urlopen(LINK_PUBLIC_TO_WEB) as f:
