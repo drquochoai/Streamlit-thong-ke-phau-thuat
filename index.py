@@ -70,14 +70,22 @@ def get_UN_data():
         # inf_bao = st.warning("Dữ liệu đã được tải thành công.")
         inf_moLinkEdit = st.link_button("Mở trang dữ liệu", url=LINK_EDIT)
         # df['NGAY'] = df['NGAY'].astype(str)
-        df['SONHA'] = df['SONHA'].astype(str)
-        df['SOCMND'] = df['SOCMND'].astype(str)
-        df['NGAYCAP'] = df['NGAYCAP'].astype(str)
-        df['NGAY'] = df['NGAY'].apply(convert_date)
-        df['NGAYKT'] = df['NGAYKT'].apply(convert_date)
-        df['NGAYRV'] = df['NGAYRV'].apply(convert_date)
-        df['NGAYRUT'] = df['NGAYRUT'].apply(convert_date)
-        df['NGAYCATCHI'] = df['NGAYCATCHI'].apply(convert_date)
+        if 'SONHA' in df.columns:
+            df['SONHA'] = df['SONHA'].astype(str)
+        if 'SOCMND' in df.columns:
+            df['SOCMND'] = df['SOCMND'].astype(str)
+        if 'NGAYCAP' in df.columns:
+            df['NGAYCAP'] = df['NGAYCAP'].astype(str)
+        if 'NGAY' in df.columns:
+            df['NGAY'] = df['NGAY'].apply(convert_date)
+        if 'NGAYKT' in df.columns:
+            df['NGAYKT'] = df['NGAYKT'].apply(convert_date)
+        if 'NGAYRV' in df.columns:
+            df['NGAYRV'] = df['NGAYRV'].apply(convert_date)
+        if 'NGAYRUT' in df.columns:
+            df['NGAYRUT'] = df['NGAYRUT'].apply(convert_date)
+        if 'NGAYCATCHI' in df.columns:
+            df['NGAYCATCHI'] = df['NGAYCATCHI'].apply(convert_date)
         return df.reset_index(drop=True)
 
         with urllib.request.urlopen(LINK_PUBLIC_TO_WEB) as f:
@@ -109,10 +117,14 @@ try:
         st.error("Chọn ít nhất 1 bác sĩ.")
     else:
         data_GOC_NTMLN = df.loc[df["HOTEN1"].isin(danhSachBacSi)]
+        
         # data /= 1000000.0
         
         
         dulieu_baoCao = data_GOC_NTMLN[['MABN', 'HOTEN', 'NAMSINH', 'NGAY', 'TENPT', 'HOTEN1']].rename(columns={'MABN': 'PID', 'HOTEN': 'Tên BN', 'HOTEN1': 'PTV', 'NAMSINH': "Năm sinh", 'NGAY': "Ngày PT", 'TENPT': "Tên phẫu thuật"})
+        dulieu_baoCao = dulieu_baoCao.sort_values("Ngày PT")
+        # add column "STT" as the first column of dulieu_baoCao, start from 1,2,3... to end
+        dulieu_baoCao.insert(0, "STT", range(1, len(dulieu_baoCao) + 1))
         # st.write(dulieu_baoCao)
         
         st.header("Tổng số PT/TT: " + str(dulieu_baoCao.shape[0]))
@@ -127,14 +139,22 @@ try:
         unique_TENPTDM = data_GOC_NTMLN['TENPTDM'].unique()
         newdf = pd.DataFrame({'Tên PT/TT': unique_TENPTDM, 'Số lượng': data_GOC_NTMLN.groupby(
             'TENPTDM').size()}).reset_index(drop=True)
-
+        total = newdf['Số lượng'].sum()
+        new_row = pd.DataFrame({'Tên PT/TT': ['Tổng số'], 'Số lượng': [total]})
+        newdf = pd.concat([newdf, new_row], ignore_index=True)
         # st.write(newdf)
         # Generate an HTML table using tabulate
         html_table = tabulate(newdf.to_dict("records"),
                               tablefmt="html", headers="keys")
+        
+        # Inject styling to bold the last row 
+        html_table = html_table.replace("</table>", "<style>tr:last-child {font-weight: bold;}</style></table>")
+
+
         st.markdown(f'{html_table}', unsafe_allow_html=True)
 
-        # PTTT theo bác sĩ
+
+        # # # # PTTT theo bác sĩ
         st.header("Tổng số PT/TT theo bác sĩ:")
         unique_HOTEN1 = data_GOC_NTMLN['HOTEN1'].unique()
         newdf = pd.DataFrame({'PTV': unique_HOTEN1, 'Số lượng': data_GOC_NTMLN.groupby(
@@ -144,6 +164,7 @@ try:
         # Generate an HTML table using tabulate
         html_table = tabulate(sorted_df.to_dict(
             "records"), tablefmt="html", headers="keys")
+        
         st.markdown(f'{html_table}', unsafe_allow_html=True)
         # f'{df.to_markdown()}'
         # chart = (
