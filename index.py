@@ -147,8 +147,15 @@ try:
         html_table = tabulate(newdf.to_dict("records"),
                               tablefmt="html", headers="keys")
         
-        # Inject styling to bold the last row 
-        html_table = html_table.replace("</table>", "<style>tr:last-child {font-weight: bold;}</style></table>")
+        # Modify the HTML to include a specific ID and style
+        html_table = f"""
+        <table id="dmpt">
+        {html_table[6:]}
+        <style>
+        table#dmpt tr:last-child {{ font-weight: bold; }}  # Target specific table
+        </style>
+        </table>
+        """
 
 
         st.markdown(f'{html_table}', unsafe_allow_html=True)
