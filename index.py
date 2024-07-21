@@ -60,10 +60,11 @@ try:
         # st.write(dulieu_baoCao)
         
         st.header("Tổng số PT/TT: " + str(dulieu_baoCao.shape[0]))
-        
-        html_table = tabulate(dulieu_baoCao.sort_values("Ngày PT").to_dict("records"),
-                              tablefmt="html", headers="keys")
-        st.markdown(f'{html_table}', unsafe_allow_html=True)
+        with st.expander("Danh sách bệnh nhân"):
+
+            html_table = tabulate(dulieu_baoCao.sort_values("Ngày PT").to_dict("records"),
+                                tablefmt="html", headers="keys")
+            st.markdown(f'{html_table}', unsafe_allow_html=True)
         
         
         # PT theo danh mục
@@ -89,7 +90,6 @@ try:
         </table>
         """
 
-
         st.markdown(f'{html_table}', unsafe_allow_html=True)
 
 
@@ -103,7 +103,7 @@ try:
         # Generate an HTML table using tabulate
         html_table = tabulate(sorted_df.to_dict(
             "records"), tablefmt="html", headers="keys")
-        
+
         st.markdown(f'{html_table}', unsafe_allow_html=True)
         # st.bar_chart(sorted_df.set_index("PTV"))
         # f'{df.to_markdown()}'

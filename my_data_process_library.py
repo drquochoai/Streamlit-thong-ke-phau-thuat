@@ -13,8 +13,12 @@ def convert_date(date_str):
         return datetime.date(date_str.year, date_str.day, date_str.month)
     elif isinstance(date_str, str):
         # If the input is a string, extract day, month, and year
-        day, month, year = int(date_str[:2]), int(date_str[3:5]), int(date_str[6:10])
-        return datetime.date(year, month, day)
+        
+        try:
+            day, month, year = int(date_str[:2]), int(date_str[3:5]), int(date_str[6:10])
+            return datetime.date(year, month, day)
+        except ValueError:
+            return datetime.date(1999, 9, 9)
     else:
         return datetime.date(1999, 9, 9)
 
