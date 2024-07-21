@@ -173,6 +173,7 @@ try:
             "records"), tablefmt="html", headers="keys")
         
         st.markdown(f'{html_table}', unsafe_allow_html=True)
+        # st.bar_chart(sorted_df.set_index("PTV"))
         # f'{df.to_markdown()}'
         # chart = (
         #     alt.Chart(data)
