@@ -6,6 +6,7 @@ from tabulate import tabulate
 import datetime
 import my_data_process_library as mylib
 import plotly.express as px
+import plotly.graph_objects as go
 
 # from pygwalker.api.streamlit import StreamlitRenderer
 
@@ -36,22 +37,22 @@ st.markdown(
 
 def classify_procedure(procedure_description):
     keywords = {
-        "PTNSLN": ["sinh thiết phổi", "soi màng phổi sinh thiết", "nội soi lồng ngực", "kén khí", "cắt kén", "sinh thiết màng phổi", "cắt phổi không", "nội soi cắt màng ngoài tim", "giao cảm ngực", "hạch giao cảm", "soi lồng ngực", "soi lồng ngực sinh thiết"],
-        "U trung thất": ["trung thất"],
-        "Tuyến giáp": ["tuyến giáp", "cắt tuyến giáp", "cắt tuyến giáp"],
-        "cắt thùy phổi": ["thùy phổi"],
-        "Suy tĩnh mạch": ["laser", "giãn tĩnh mạch", "Lazer", "Laser"],
-        "Catheter cảnh hầm": ["để lọc máu", "catheter tĩnh mạch", "chọc tĩnh mạch cảnh"],
-        "AVF": ["để chạy thận", "nối thông"],
-        "Bypass mạch máu": ["thiếu máu mạn tính", "tắc động mạch chi cấp tính", "nối tĩnh mạch lách", "động mạch đùi sâu", "tắc mạch máu các chi", "bắc cầu gần điều", "bắc cầu tĩnh mạch", "tắc động mạch chi bán", "khâu vết thương mạch máu"],
-        "Bypass hẹp-tắc-phình ĐMC": ["bắc cầu động mạch chủ ngực", "bắc cầu động mạch chủ với các động", "thay đoạn động mạch chủ bụng trên và dưới thận", "phồng động mạch chủ bụng"],
-        "Chích xơ TM": ["Gây xơ tĩnh"],
-        "DLMP": ["ẫn lưu khí", "phổi liên tục", "lưu màng phổi", "dẫn lưu tối thiểu khoang", "dẫn lư­u khí"],
-        "LN mổ mở": ["bóc vỏ màng", "bóc màng phổi", "u máu", "u bã đậu", "u lành phần mềm", "chỉ thép", "cơ hoành", "định lồng ngực", "viêm màng ngoài tim", "điều trị gãy xương", "rút nẹp vít", "tháo nửa bàn", "tháo khớp", "rạch áp xe", "sinh thiết hạch cổ", "hạch cổ bảo", "vét hạch cổ", "Sinh thiết hạch", "mở ngực", "khí quản", "u phần mềm", "gỡ dính", "rò phần mềm", "vết thương mạch máu", "vết thương phần mềm", "u mạch máu", "nhiễm trùng vết mổ", "khâu đơn giản vết thương", "lưu màng tim qua đường", "dẫn lưu dịch khoang màng", "cầm máu do chảy máu", "mở cạnh cổ dẫn", "dẫn lưu khoang màng tim", "Mở khoang và giải phóng mạch", "Dẫn lưu màng ngoài tim", "PT dẫn lưu áp xe phổi", "hạch lao to vùng nách"],
-        "DSA_Stent graft ĐMC": ["stent Graft", "stent động mạch chủ"],
-        "động mạch cảnh": ["động mạch cảnh"],
+        "LN_PTNS": ["sinh thiết phổi", "soi màng phổi sinh thiết", "nội soi lồng ngực", "kén khí", "cắt kén", "sinh thiết màng phổi", "cắt phổi không", "nội soi cắt màng ngoài tim", "giao cảm ngực", "hạch giao cảm", "soi lồng ngực", "soi lồng ngực sinh thiết"],
+        "LN_U trung thất": ["trung thất"],
+        "LN_Tuyến giáp": ["tuyến giáp", "cắt tuyến giáp", "cắt tuyến giáp"],
+        "LN_cắt thùy phổi": ["thùy phổi"],
+        "MM_Suy tĩnh mạch": ["laser", "giãn tĩnh mạch", "Lazer", "Laser"],
+        "MM_Catheter cảnh hầm": ["để lọc máu", "catheter tĩnh mạch", "chọc tĩnh mạch cảnh"],
+        "MM_AVF": ["để chạy thận", "nối thông"],
+        "MM_Bypass mạch máu": ["thiếu máu mạn tính", "tắc động mạch chi cấp tính", "nối tĩnh mạch lách", "động mạch đùi sâu", "tắc mạch máu các chi", "bắc cầu gần điều", "bắc cầu tĩnh mạch", "tắc động mạch chi bán", "khâu vết thương mạch máu"],
+        "MM_Bypass hẹp-tắc-phình ĐMC": ["bắc cầu động mạch chủ ngực", "bắc cầu động mạch chủ với các động", "thay đoạn động mạch chủ bụng trên và dưới thận", "phồng động mạch chủ bụng"],
+        "TT_MM_Chích xơ TM": ["Gây xơ tĩnh"],
+        "LN_DLMP": ["ẫn lưu khí", "phổi liên tục", "lưu màng phổi", "dẫn lưu tối thiểu khoang", "dẫn lư­u khí"],
+        "LN_mổ mở": ["bóc vỏ màng", "bóc màng phổi", "u máu", "u bã đậu", "u lành phần mềm", "chỉ thép", "cơ hoành", "định lồng ngực", "viêm màng ngoài tim", "điều trị gãy xương", "rút nẹp vít", "tháo nửa bàn", "tháo khớp", "rạch áp xe", "sinh thiết hạch cổ", "hạch cổ bảo", "vét hạch cổ", "Sinh thiết hạch", "mở ngực", "khí quản", "u phần mềm", "gỡ dính", "rò phần mềm", "vết thương mạch máu", "vết thương phần mềm", "u mạch máu", "nhiễm trùng vết mổ", "khâu đơn giản vết thương", "lưu màng tim qua đường", "dẫn lưu dịch khoang màng", "cầm máu do chảy máu", "mở cạnh cổ dẫn", "dẫn lưu khoang màng tim", "Mở khoang và giải phóng mạch", "Dẫn lưu màng ngoài tim", "PT dẫn lưu áp xe phổi", "hạch lao to vùng nách"],
+        "MM_DSA_Stent graft ĐMC": ["stent Graft", "stent động mạch chủ"],
+        "MM_động mạch cảnh": ["động mạch cảnh"],
         "TT_VAC": ["áp lực âm"],
-        "TT_NLN": ["chụp cắt lớp vi tính", "bỏ tổ chức hoại tử", "lọc tổ chức hoại tử", "Rút sonde dẫn", "Gây dính màng phổi", "Rút buồng tiêm", "băng vết mổ", "Chọc hút dịch", "Chọc dò dịch", "hút khí màng", "Chọc hút khí", "bóng đối xung động", "dẫn lưu áp xe tồn", "Chọc hút", "chỉ khâu da", "Chọc dịch màng ngoài", "Chọc tháo dịch màng", "thiết phần mềm bằng phương", "Chọc dò và dẫn lưu màng", "phân phúc mạc"],
+        "TT_NLN": ["chụp cắt lớp vi tính", "bỏ tổ chức hoại tử", "lọc tổ chức hoại tử", "Rút sonde dẫn", "Gây dính màng phổi", "Rút buồng tiêm", "băng vết mổ", "Chọc hút dịch", "Chọc dò dịch", "hút khí màng", "TT_Chọc hút khí", "bóng đối xung động", "dẫn lưu áp xe tồn", "Chọc hút", "chỉ khâu da", "Chọc dịch màng ngoài", "Chọc tháo dịch màng", "thiết phần mềm bằng phương", "Chọc dò và dẫn lưu màng", "phân phúc mạc"],
         "TIM_CABG": ["mạch vành"],
         "TIM_TBS": ["điều trị hẹp đường ra", "thông liên nhĩ", "thông liên thất", "tim một tâm thất", "hẹp van động mạch phổi", "hồi lưu tĩnh mạch phổi", "Fallot", "kênh nhĩ thất", "Band động mạch phổi", "còn ống động mạch", "không có van động mạch phổi", "hẹp đường ra thất phải"],
         "TIM_thay van hai lá": ["thay van hai lá"],
@@ -59,9 +60,9 @@ def classify_procedure(procedure_description):
         "TIM_sửa van ba lá": ["thay van ba lá đơn thuần"],
         "TIM_thay van ĐMC": ["van động mạch chủ"],
         "TIM_u nhầy": ["u nhầy tim"],
-        "PTNSLN_hạch giao cảm": ["giao cảm ngực", "hạch giao cảm"],
-        "PTNSLN_nuss": ["Nuss", "lõm ngực", "lõm lồng ngực"],
-        "DSA_Can thiệp nội mạch": ["Chụp, nong", "Chụp và can thiệp", "số hóa xóa nền", "nong động mạch ngoại", "nong cầu nối động", "Hybrid điều trị bệnh mạch máu"]
+        "LN_PTNS_hạch giao cảm": ["giao cảm ngực", "hạch giao cảm"],
+        "LN_PTNS_nuss": ["Nuss", "lõm ngực", "lõm lồng ngực"],
+        "MM_DSA_Can thiệp nội mạch": ["Chụp, nong", "Chụp và can thiệp", "số hóa xóa nền", "nong động mạch ngoại", "nong cầu nối động", "Hybrid điều trị bệnh mạch máu"]
     }
 
     for category, keyword_list in keywords.items():
@@ -131,17 +132,20 @@ try:
         unique_TENPTDM = data_GOC_NTMLN['TENPTDM'].unique()
         so_luong = data_GOC_NTMLN.groupby(
             'TENPTDM').size().reindex(unique_TENPTDM, fill_value=0)
-        newdf = pd.DataFrame(
+        newdf_loaiNhomPT = pd.DataFrame(
             {'Tên PT/TT': unique_TENPTDM, 'Số lượng': so_luong}).reset_index(drop=True)
-        total = newdf['Số lượng'].sum()
-        newdf['Phân loại'] = newdf['Tên PT/TT'].astype(str).apply(classify_procedure)
-        new_row = pd.DataFrame({'Tên PT/TT': ['Tổng số'], 'Số lượng': [total], 'Phân loại': ["-"]})
+        total = newdf_loaiNhomPT['Số lượng'].sum()
+        newdf_loaiNhomPT['Phân loại'] = newdf_loaiNhomPT['Tên PT/TT'].astype(str).apply(classify_procedure)
+        # create new column name "Nhóm PT" for newdf_loaiNhomPT, if column "Phân loại" start with "MM_" > "Mạch máu", if start with "LN_" > "Lồng ngực", if start with "TIM_" > "Tim", if start with "TT_" > "Thủ thuật khác"
+        newdf_loaiNhomPT['Nhóm PT'] = newdf_loaiNhomPT['Phân loại'].apply(lambda x: "Mạch máu" if x.startswith("MM_") else "Lồng ngực" if x.startswith("LN_") else "Tim" if x.startswith("TIM_") else "Thủ thuật khác")
+        
+        new_row = pd.DataFrame({'Tên PT/TT': ['Tổng số'], 'Số lượng': [total], 'Phân loại': ["-"], 'Nhóm PT': ["-"]})
 
-        newdf = pd.concat([newdf, new_row], ignore_index=True)
+        newdf_loaiNhomPT = pd.concat([newdf_loaiNhomPT, new_row], ignore_index=True)
         # st.write(newdf)
         # Generate an HTML table using tabulate
         with st.expander("PT/TT theo danh mục:"):
-            html_table = tabulate(newdf.to_dict("records"),
+            html_table = tabulate(newdf_loaiNhomPT.to_dict("records"),
                                   tablefmt="html", headers="keys")
             html_table = f"""
             <table id="dmpt">
@@ -158,10 +162,10 @@ try:
         unique_HOTEN1 = data_GOC_NTMLN['HOTEN1'].unique()
         so_luong = data_GOC_NTMLN.groupby(
             'HOTEN1').size().reindex(unique_HOTEN1, fill_value=0)
-        newdf = pd.DataFrame(
+        newdf_theoPTV = pd.DataFrame(
             {'PTV': unique_HOTEN1, 'Số lượng': so_luong}).reset_index(drop=True)
 
-        sorted_df = newdf.sort_values('Số lượng', ascending=False)
+        sorted_df = newdf_theoPTV.sort_values('Số lượng', ascending=False)
         # Generate an HTML table using tabulate
         html_table = tabulate(sorted_df.to_dict(
             "records"), tablefmt="html", headers="keys")
@@ -186,14 +190,24 @@ try:
         data_GOC_NTMLN['Tháng'] = pd.to_datetime(
             data_GOC_NTMLN['NGAY']).dt.month
         data_GOC_NTMLN['Năm'] = pd.to_datetime(data_GOC_NTMLN['NGAY']).dt.year
-        monthly_count = data_GOC_NTMLN.groupby(
-            ['Năm', 'Tháng']).size().reset_index(name='Số lượng')
+        monthly_count = data_GOC_NTMLN.groupby(['Năm', 'Tháng']).size().reset_index(name='Số lượng')
         st.header("Tổng số PT/TT theo tháng:")
         # st.dataframe(monthly_count)
         # st.bar_chart(monthly_count, x='Tháng', y='Số lượng', color='Năm')
         fig = px.bar(monthly_count, x='Tháng', y='Số lượng',
                      color='Số lượng', text='Số lượng')
         st.plotly_chart(fig)
+        
+        # Tạo nhóm lớn cho các phẫu thuật
+        # Pie chart
+        col1, col2 = st.columns([4,8])
+        grouped_NhomPT_Lon = newdf_loaiNhomPT.groupby('Nhóm PT')['Số lượng'].sum().reset_index(name='Số lượng')
+        grouped_NhomPT_Lon = grouped_NhomPT_Lon[grouped_NhomPT_Lon['Nhóm PT'] != "-"]
+        col1.dataframe(grouped_NhomPT_Lon)
+        fig_pie = px.pie(grouped_NhomPT_Lon, values='Số lượng', names='Nhóm PT', labels={'Số lượng': 'Số lượng'},  title='Tỉ lệ phân loại phẫu thuật')
+        fig_pie.update_traces(textposition='inside', textinfo='percent+label')
+        col2.plotly_chart(fig_pie)
+        
 except URLError as e:
     st.error(
         """
