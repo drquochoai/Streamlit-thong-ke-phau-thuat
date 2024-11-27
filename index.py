@@ -96,9 +96,13 @@ try:
     # dsbacsikhoaNTMLN_filter = [
     #     bs for bs in dsbacsikhoaNTMLN if bs in df["HOTEN1"].unique().tolist()]
     # # df["HOTEN1"].unique().tolist()
-    keywords = ["Nguyễn Anh Dũng", "Trần Thúc Khang",
-                "Lê Thị Ngọc Hằng", "Nguyễn Hồng Vinh",
-                "Trần Quốc Hoài", "Phạm Ngọc Minh Thủy", "Phan Vũ Hồng Hải", "Lê Chí Hiếu", "Nguyễn Minh Trí Viên", "Bùi Trọng Đạt"]
+    # keywords = ["Nguyễn Anh Dũng", "Trần Thúc Khang",
+    #             "Lê Thị Ngọc Hằng", "Nguyễn Hồng Vinh",
+    #             "Trần Quốc Hoài", "Phạm Ngọc Minh Thủy", "Phan Vũ Hồng Hải", "Lê Chí Hiếu", "Nguyễn Minh Trí Viên", "Bùi Trọng Đạt"]
+    keywords = ["Nguyễn Anh Dũng",
+                "Lê Thị Ngọc Hằng",
+                "Trần Quốc Hoài", "Phạm Ngọc Minh Thủy", "Phan Vũ Hồng Hải", "Lê Chí Hiếu",
+                "Trần Công Quyền"]
     filtered_DanhSachBacSi = [name for name in df["HOTEN1"].unique().tolist(
     ) if any(keyword.lower() in name.lower() for keyword in keywords)]
     # print(filtered_names)
