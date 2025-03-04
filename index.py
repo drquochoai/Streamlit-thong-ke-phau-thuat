@@ -76,10 +76,11 @@ try:
     global sheeturl
     sheeturl = st.text_input(
         "Nhập link file excel", "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNpA9xv7ci1tGPdF1I-HwPdPWNvyryr5YNQvXOwxKRIWdOg5zPy-2xvXjrRoChqeb6QmwQX-qO4-uO/pub?output=xlsx")
-    col1, col2, col3 = st.columns(3)  # Equal width columns
-    button23 = col1.button("2023")
-    button22 = col2.button("2022")
-    button21 = col3.button("2021")
+    col1, col2, col3, col4 = st.columns(4)  # Equal width columns
+    button24 = col1.button("2024")
+    button23 = col2.button("2023")
+    button22 = col3.button("2022")
+    button21 = col4.button("2021")
 
     if button23:
         sheeturl = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/files/2023.xlsx"
@@ -87,6 +88,8 @@ try:
         sheeturl = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/files/2022.xlsx"
     if button21:
         sheeturl = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/files/2021.xlsx"
+    if button24:
+        sheeturl = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/files/2024.xlsx"
 
     df = mylib.get_UN_data(sheeturl)
 
