@@ -153,17 +153,18 @@ try:
         # st.write(newdf)
         # Generate an HTML table using tabulate
         with st.expander("PT/TT theo danh mục:"):
-            html_table = tabulate(newdf_loaiNhomPT.to_dict("records"),
-                                  tablefmt="html", headers="keys")
-            html_table = f"""
-            <table id="dmpt">
-            {html_table[7:]}
-            <style>
-            table#dmpt tr:last-child {{ font-weight: bold; }}
-            </style>
-            </table>
-            """
-            st.markdown(f'{html_table}', unsafe_allow_html=True)
+            # html_table = tabulate(newdf_loaiNhomPT.to_dict("records"),
+            #                       tablefmt="html", headers="keys")
+            # html_table = f"""
+            # <table id="dmpt">
+            # {html_table[7:]}
+            # <style>
+            # table#dmpt tr:last-child {{ font-weight: bold; }}
+            # </style>
+            # </table>
+            # """
+            # st.markdown(f'{html_table}', unsafe_allow_html=True)
+            st.dataframe(newdf_loaiNhomPT)
 
         # # # # PTTT theo bác sĩ
         st.header("Tổng số PT/TT theo bác sĩ:")
