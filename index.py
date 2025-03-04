@@ -104,7 +104,7 @@ try:
     #             "Trần Quốc Hoài", "Phạm Ngọc Minh Thủy", "Phan Vũ Hồng Hải", "Lê Chí Hiếu", "Nguyễn Minh Trí Viên", "Bùi Trọng Đạt"]
     keywords = ["Nguyễn Anh Dũng",
                 "Lê Thị Ngọc Hằng",
-                "Trần Quốc Hoài", "Phạm Ngọc Minh Thủy", "Phan Vũ Hồng Hải", "Lê Chí Hiếu",
+                "Trần Quốc Hoài", "Phan Vũ Hồng Hải", "Lê Chí Hiếu",
                 "Trần Công Quyền"]
     filtered_DanhSachBacSi = [name for name in df["HOTEN1"].unique().tolist(
     ) if any(keyword.lower() in name.lower() for keyword in keywords)]
@@ -130,9 +130,10 @@ try:
 
         st.header("Tổng số PT/TT: " + str(dulieu_baoCao.shape[0]))
         with st.expander("Danh sách bệnh nhân"):
-            html_table = tabulate(dulieu_baoCao.sort_values("Ngày PT").to_dict("records"),
-                                  tablefmt="html", headers="keys")
-            st.markdown(f'{html_table}', unsafe_allow_html=True)
+            # html_table = tabulate(dulieu_baoCao.sort_values("Ngày PT").to_dict("records"),
+            #                       tablefmt="html", headers="keys")
+            # st.markdown(f'{html_table}', unsafe_allow_html=True)
+            st.dataframe(dulieu_baoCao)
 
         # PT theo danh mục
         # st.header("Tổng số PT/TT theo danh mục:")
