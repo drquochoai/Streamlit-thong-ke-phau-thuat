@@ -81,6 +81,7 @@ try:
     button23 = col2.button("2023")
     button22 = col3.button("2022")
     button21 = col4.button("2021")
+    buttontest = col1.button("test")
 
     if button23:
         sheeturl = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/files/2023.xlsx"
@@ -90,7 +91,8 @@ try:
         sheeturl = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/files/2021.xlsx"
     if button24:
         sheeturl = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/files/2024.xlsx"
-
+    if buttontest:
+        sheeturl = "https://github.com/drquochoai/Streamlit-thong-ke-phau-thuat/raw/main/files/test.xlsx"
     df = mylib.get_UN_data(sheeturl)
 
     # dsbacsikhoaNTMLN = ["1342 TS.BS Nguyễn Anh Dũng", "6489 ThS. BS Trần Thúc Khang",
