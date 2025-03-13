@@ -104,17 +104,19 @@ try:
     # keywords = ["Nguyễn Anh Dũng", "Trần Thúc Khang",
     #             "Lê Thị Ngọc Hằng", "Nguyễn Hồng Vinh",
     #             "Trần Quốc Hoài", "Phạm Ngọc Minh Thủy", "Phan Vũ Hồng Hải", "Lê Chí Hiếu", "Nguyễn Minh Trí Viên", "Bùi Trọng Đạt"]
-    keywords = ["Nguyễn Anh Dũng",
-                "Lê Thị Ngọc Hằng",
-                "Trần Quốc Hoài", "Phan Vũ Hồng Hải", "Lê Chí Hiếu",
-                "Trần Công Quyền"]
-    filtered_DanhSachBacSi = [name for name in df["HOTEN1"].unique().tolist(
-    ) if any(keyword.lower() in name.lower() for keyword in keywords)]
-    # print(filtered_names)
+    # keywords = ["Nguyễn Anh Dũng",
+    #             "Lê Thị Ngọc Hằng",
+    #             "Trần Quốc Hoài", "Phan Vũ Hồng Hải", "Lê Chí Hiếu",
+    #             "Trần Công Quyền"]
+    filtered_DanhSachBacSi = df[df['HOTEN1'].str.lower().str.contains(
+        "nguyễn anh dũng|trần công quyền|lê thị ngọc hằng|trần quốc hoài|lê chí hiếu|phan vũ hồng hải|phạm hưng"
+    )]
+    default_selection = filtered_DanhSachBacSi["HOTEN1"].unique().tolist()
 
     danhSachBacSi = st.multiselect(
-        "Chọn bác sĩ", df["HOTEN1"].unique().tolist(),
-        filtered_DanhSachBacSi
+        "Chọn bác sĩ",
+        df["HOTEN1"].unique().tolist(),
+        default_selection
     )
     if not danhSachBacSi:
         st.error("Chọn ít nhất 1 bác sĩ.")

@@ -11,7 +11,10 @@ def convert_date(date_str):
     global option_Sheet_thong_ke
     if isinstance(date_str, datetime.date):
         # If the input is a date object, swap month and day
-        return datetime.date(date_str.year, date_str.day, date_str.month)
+        try:
+            return datetime.date(date_str.year, date_str.month, date_str.day)
+        except ValueError:
+            return datetime.date(date_str.year, date_str.day, date_str.month)
     elif isinstance(date_str, str):
         # If the input is a string, extract day, month, and year
         
